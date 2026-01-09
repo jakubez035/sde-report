@@ -20,16 +20,49 @@ src/main/java/com/smarthome/
 ## Design Patterns Implemented
 
 ### Creational Patterns
-- **Factory Method**: `DeviceFactory` interface with concrete factories (`LightFactory`, `ThermostatFactory`, `DoorLockFactory`)
-- **Abstract Factory**: `AbstractDeviceFactory` for creating families of related devices
+- **Factory Method**: `DeviceFactory` interface with concrete factories (`LightFactory`, `ThermostatFactory`, `DoorLockFactory`). `LightFactory` allows the system to create Light objects without coupling the client code to concrete classes.
+- **Abstract Factory**: `AbstractDeviceFactory` provides a way to create families of related device factories (Light, Thermostat, DoorLock).
 
 ### Structural Patterns
-- **Facade**: `SmartHomeFacade` provides simplified interface to complex system
-- **Adapter**: `DeviceAdapter` adapts `ThirdPartyDevice` to `Device` interface
+- **Facade**: `SmartHomeFacade` provides a high-level, simplified interface to control the entire complex system of devices and sensors.
+- **Adapter**: `DeviceAdapter` adapts the `ThirdPartyDevice` API (using `activate()`) to our standard `Device` interface (`turnOn()`), allowing seamless legacy hardware integration.
 
 ### Behavioural Patterns
-- **Command**: `Command` interface with concrete commands (`TurnLightOnCommand`, `TurnLightOffCommand`, `SetTempCommand`, `LockDoorCommand`, `UnlockDoorCommand`) and `CommandInvoker` for undo support
-- **Observer**: `SensorSubject`/`DeviceObserver` pattern for sensor event handling
+- **Command**: `Command` interface with concrete commands (`TurnLightOnCommand`, `TurnLightOffCommand`, `SetTempCommand`, `LockDoorCommand`, `UnlockDoorCommand`) and `CommandInvoker` for undo support. Encapsulates requests as objects. Alex implemented `TurnLightOnCommand` and `TurnLightOffCommand` with `CommandInvoker` support for a history stack, enabling full Undo functionality.
+- **Observer**: `SensorSubject`/`DeviceObserver` pattern for sensor-driven automation. Sensors notify the SmartHomeController to trigger automatic device responses.
+
+### Builder Pattern
+- **Builder**: `SceneBuilder` provides a fluent interface for building complex `Scene` configurations step-by-step. It includes validation to ensure scenes cannot be built without a name.
+
+## Comprehensive Testing Suite
+
+To ensure high-quality software design and risk mitigation, the following test suites were implemented:
+
+### Unit Testing (LightTest.java)
+
+ - **Purpose:** Validates individual component logic.
+
+    - Verifies Light initialization defaults (brightness at 100%, status OFF).
+
+    - Tests state transitions and brightness edge-case boundaries.
+
+    - Confirms the LightFactory returns the correct concrete object type.
+
+### Integration Testing (PatternIntegrationTestAlex.java)
+
+- **Purpose:** Verifies interaction between separate design patterns.
+
+    - Command + Adapter: Proves that adapted third-party hardware can still be tracked in the undo history stack.
+
+    - Builder Validation: Tests risk assessment by attempting to build a scene without a name, verifying that IllegalStateException is correctly thrown.
+
+### Scale & Performance Testing (SystemScaleTest.java)
+
+- **Purpose:** Stress tests the system for high-load environments.
+
+    - Bulk Operations: Simulates a mansion environment by creating 1,000 virtual lights via the Factory pattern.
+
+    - History Stress: Executes 2,500 operations and verifies the CommandInvoker stack integrity after 500 consecutive undo actions.
 
 ## Building
 
@@ -46,8 +79,29 @@ To run demo run:
 mvn exec:java -Dexec.mainClass='com.smarthome.main.SmartHomeSimulator'
 ```
 
+To run tests run:
+# Unit Tests
+mvn exec:java -Dexec.mainClass='com.smarthome.test.LightTest'
+
+# Integration Tests
+mvn exec:java -Dexec.mainClass='com.smarthome.test.PatternIntegrationTestAlex'
+
+# Performance Tests
+mvn exec:java -Dexec.mainClass='com.smarthome.test.SystemScaleTest'
+
+# Door Lock Test
+mvn exec:java -Dexec.mainClass='com.smarthome.test.DoorLockTest'
+
+# Thermostat Test
+mvn exec:java -Dexec.mainClass='com.smarthome.test.ThermostatTest'
+
+
+
 # Smart Home Simulator - Class Diagram
 <img width="3941" height="902" alt="SDE Report Home Simulator Class Diagram" src="https://github.com/user-attachments/assets/7faadd87-3a33-40c0-a321-7771c92e0312" />
+
+# Smart Home Simulator - Flowchart
+
 
 ## Overview
 
@@ -57,7 +111,7 @@ The Smart Home Simulator class diagram illustrates a Java application that demon
 
 ### 1. Devices Package (`com.smarthome.devices`) - Light Blue
 
-**Purpose**: Defines the core device abstraction and concrete device implementations.
+**Purpose**: Defines the core `Device` interface and concrete implementations for `Light`, `Thermostat`, and `DoorLock`.
 
 **Key Components**:
 - **Device Interface**: The base interface that all smart home devices implement. It provides common operations: `getId()`, `getName()`, `turnOn()`, `turnOff()`, and `isOn()`.
@@ -69,7 +123,7 @@ The Smart Home Simulator class diagram illustrates a Java application that demon
 
 ### 2. Factory Package (`com.smarthome.factory`) - Light Orange
 
-**Purpose**: Implements creational design patterns for device instantiation.
+**Purpose**: Implements `DeviceFactory` for encapsulated creation. Each factory (e.g., `LightFactory`) handles specific initialization logic.
 
 **Key Components**:
 - **DeviceFactory Interface**: Defines the factory method pattern for creating devices. Provides a `createDevice()` method that returns a `Device` instance.
