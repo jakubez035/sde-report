@@ -129,7 +129,8 @@ The Smart Home Simulator class diagram illustrates a Java application that demon
 **Key Components**:
 - **DeviceFactory Interface**: Defines the factory method pattern for creating devices. Provides a `createDevice()` method that returns a `Device` instance.
 - **Concrete Factories**: 
-  - `LightFactory`: Creates `Light` instances
+  - `LightFactory`: The LightFactory provides a structured way to generate smart lighting devices while adhering to the DeviceFactory interface. createDevice(String id, String name): This method takes a unique identifier and a user-friendly name, returning a fully initialized Light object.
+  Default State Initialization: When created through the factory, the light is automatically set to its default state: OFF with 100% brightness.
   - `ThermostatFactory`: Creates `Thermostat` instances (with overloaded method for initial temperature)
   - `DoorLockFactory`: Creates `DoorLock` instances (with overloaded method for initial lock state)
 - **AbstractDeviceFactory**: Abstract factory pattern that provides methods to obtain factory instances for different device types.
@@ -165,12 +166,13 @@ The Smart Home Simulator class diagram illustrates a Java application that demon
 
 **Purpose**: Implements the Command pattern for encapsulating device operations with undo functionality.
 
+The Command pattern decouples the object that invokes the operation from the one that knows how to perform it. In your implementation, this allows the SmartHomeSimulator to issue requests without knowing the specific logic of each device.
+
 **Key Components**:
-- **Command Interface**: Base interface for all commands with `execute()` and `undo()` methods.
-- **CommandInvoker Class**: Manages command execution and maintains a history stack for undo operations. Provides `executeCommand()`, `undoLastCommand()`, and `clearHistory()` methods.
+- **Command Interface**: Base interface for all commands with `execute()` (Encapsulates the specific action (e.g., turning a light on).) and `undo()` (Reverses the action by restoring the device to its state prior to execution.) methods.
+- **CommandInvoker Class**: Manages command execution and maintains a history stack for undo operations. Provides `executeCommand()`(Triggers the command's logic and pushes it onto the history stack.), `undoLastCommand()` (Pops the most recent command from the stack and calls its undo() method.), and `clearHistory()` (Resets the stack, typically used when changing scenes or restarting the simulation.) methods.
 - **Concrete Commands**:
-  - `TurnLightOnCommand`: Encapsulates turning a light on, storing previous state for undo
-  - `TurnLightOffCommand`: Encapsulates turning a light off
+  - `TurnLightOnCommand` & `TurnLightOffCommand`: Encapsulates turning a light on, storing previous state for undo. Before changing the state, it saves the current isOn boolean to the previousState variable. This ensures that if undo() is called, the light returns to exactly how it was (e.g., if it was already on, it stays on).
   - `SetTempCommand`: Encapsulates setting thermostat temperature, storing previous temperature
   - `LockDoorCommand`: Encapsulates locking a door, storing previous lock state
   - `UnlockDoorCommand`: Encapsulates unlocking a door
@@ -193,8 +195,8 @@ The Smart Home Simulator class diagram illustrates a Java application that demon
 **Design Pattern**: **Builder Pattern** - Separates the construction of complex objects (scenes) from their representation, allowing step-by-step construction.
 
 **Relationships**: 
-- `SceneBuilder` creates `Scene` instances
-- `Scene` uses `Device` instances to apply states
+- `SceneBuilder` - The SceneBuilder class serves as the director for the construction process, providing a "fluent interface" that makes the code readable and safe. The builder maintains a temporary Map<Device, String> to store the desired target states before the final object is ever created.
+- `Scene` uses `Device` instances to apply states. The Scene object itself is the "Product" of the builder. It acts as a preset configuration that can be "played" at any time to change the state of the entire house. The Scene class contains an execute() method that iterates through its internal map of devices. It doesn't care if the device is a Light, a Thermostat, or an Adapter; it simply interacts with the common Device interface.
 
 ### 6. Adapter Package (`com.smarthome.adapter`) - Light Pink
 
@@ -211,7 +213,7 @@ The Smart Home Simulator class diagram illustrates a Java application that demon
 
 **Relationships**: 
 - `DeviceAdapter` implements `Device` interface
-- `DeviceAdapter` wraps and adapts `ThirdPartyDevice` instances
+- `DeviceAdapter` wraps and adapts `ThirdPartyDevice` instances. It allows any `ThirdPartyDevice` to be treated as a standard object within the system. This means it can be added to the CommandInvoker's history stack or included in a Scene created by the SceneBuilder without the system knowing it is actually an external "Legacy" device. The adapter holds a private reference to a ThirdPartyDevice instance. This "wrapping" technique ensures that the original third-party code remains untouched (adhering to the Open/Closed Principle) while still being usable.
 
 ### 7. Main Package (`com.smarthome.main`) - Light Gray
 
@@ -288,3 +290,59 @@ This document provides a brief summary of three pull requests that implement cor
 
 **Features**: Motion detection simulation, automatic device control based on sensor events, intelligent temperature management
 
+
+# Pull Request Summary - Alexander Atanasov
+
+## Overview
+This document summarizes the contributions made to implement the core lighting foundation and four essential design patterns (Factory Method, Builder, Command, and Adapter), ensuring a scalable and reversible smart home environment.
+
+---
+
+## PR 4: Lighting and Creational Patterns Implementation
+
+**Purpose**: Establish the lighting foundation and flexible instantiation logic.
+
+**Key Components**:
+- **Light.java**: Core device representing a smart light with brightness control.
+- **LightFactory.java**: Factory Method pattern for encapsulated device creation.
+- **LightTest.java**: Comprehensive unit tests for state transitions and factory accuracy.
+
+**Design Patterns Demonstrated**:
+- **Factory Method**: Decouples the client from concrete light instantiation.
+
+**Features**: Default state management (OFF at 100% brightness), automated unit testing.
+
+---
+
+## PR 5: Command and Adapter Patterns Implementation
+
+**Purpose**: Implement reversible device control and legacy hardware integration.
+
+**Key Components**:
+- **CommandInvoker.java**: Manages execution and a stack-based history for undo operations.
+- **TurnLightOnCommand.java / TurnLightOffCommand.java**: Concrete commands for lighting control.
+- **DeviceAdapter.java**: Adapter pattern to bridge `ThirdPartyDevice` with the standard `Device` interface.
+- **ThirdPartyDevice.java**: Mock external API representing legacy hardware.
+
+**Design Patterns Demonstrated**:
+- **Command**: Encapsulates requests as objects to support multi-level undo.
+- **Adapter**: Allows incompatible interfaces to work together via structural wrapping.
+
+**Features**: Reversible state tracking, legacy API translation (activate -> turnOn), structural flexibility.
+
+---
+
+## PR 6: Builder Pattern and System Scale Testing
+
+**Purpose**: Implement complex scene construction and verify system performance.
+
+**Key Components**:
+- **Scene.java**: Represents a product containing a map of devices and target states.
+- **SceneBuilder.java**: Builder pattern providing a fluent interface for scene configuration.
+- **PatternIntegrationTestAlex.java**: Tests interaction between Builder, Command, and Adapter patterns.
+- **SystemScaleTest.java**: Stress test simulating 1,000 devices and 2,500 operations.
+
+**Design Patterns Demonstrated**:
+- **Builder**: Separates the construction of complex scenes from their representation.
+
+**Features**: Fluent method chaining, build-time validation for scene names, performance metrics for high-load scenarios.
