@@ -6,19 +6,28 @@ package com.smarthome.adapter;
 public class ThirdPartyDevice {
     private String deviceId;
     private String deviceType;
+    private boolean active = false;;
     
+    public ThirdPartyDevice(String deviceId, String deviceType) {
+        this.deviceId = deviceId;
+        this.deviceType = deviceType;
+    }
+
     // Third-party API methods
     public void activate() {
-        // Implementation will be added later
+        this.active = true;
+        System.out.println("Third-party " + deviceType + " (" + deviceId + ") is now activated.");
     }
     
     public void deactivate() {
-        // Implementation will be added later
-    }
+        this.active = false;
+        System.out.println("Third-party " + deviceType + " (" + deviceId + ") is now deactivated.");}
     
     public String getStatus() {
-        // Implementation will be added later
-        return null;
+        return active ? "ACTIVE" : "INACTIVE";
     }
+
+    public String getDeviceId() { return deviceId; }
+    public String getDeviceType() { return deviceType; }
 }
 

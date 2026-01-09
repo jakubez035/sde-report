@@ -41,6 +41,7 @@ public class Light implements Device {
         this.brightness = brightness;
         if (isOn) {
             System.out.println(name + " brightness adjusted to " + brightness + "%.");
+        }
     }
 
     public int getBrightness() {

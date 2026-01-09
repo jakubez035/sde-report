@@ -1,8 +1,9 @@
 package com.smarthome.builder;
 
-import com.smarthome.devices.Device;
 import java.util.HashMap;
 import java.util.Map;
+
+import com.smarthome.devices.Device;
 
 /**
  * Represents a scene configuration (e.g., Away mode, Night mode).
@@ -17,9 +18,9 @@ public class Scene {
     }
 
     public void execute() {
-        System.out.ptintln("Executing Scene: " + name);
+        System.out.println("Executing Scene: " + name);
         deviceStates.forEach((device, state) -> {
-            if (state.equaltsIgnoreCase("ON")) {
+            if (state.equalsIgnoreCase("ON")) {
                 device.turnOn();
             } else if (state.equalsIgnoreCase("OFF")) {
                 device.turnOff();
