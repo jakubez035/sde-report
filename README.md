@@ -27,7 +27,7 @@ src/main/java/com/smarthome/
 - **Adapter**: `DeviceAdapter` adapts `ThirdPartyDevice` to `Device` interface
 
 ### Behavioural Patterns
-- **Command**: `Command` interface with concrete commands (`TurnLightOnCommand`, `SetTempCommand`, etc.) and `CommandInvoker` for undo support
+- **Command**: `Command` interface with concrete commands (`TurnLightOnCommand`, `TurnLightOffCommand`, `SetTempCommand`, `LockDoorCommand`, `UnlockDoorCommand`) and `CommandInvoker` for undo support
 - **Observer**: `SensorSubject`/`DeviceObserver` pattern for sensor event handling
 
 ## Building
