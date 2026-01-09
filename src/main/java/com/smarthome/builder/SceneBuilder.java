@@ -1,28 +1,31 @@
 package com.smarthome.builder;
 
 import com.smarthome.devices.Device;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Builder pattern: Builds a Scene step-by-step.
  */
 public class SceneBuilder {
     private String name;
-    
-    // Builder methods will be implemented later
-    
+    private Map<Device, String> deviceStates = new HashMap<>();
+
     public SceneBuilder setName(String name) {
-        // Implementation will be added later
-        return this;
+        this.name = name;
+        return this; //Returning 'this' allows method changing
     }
     
     public SceneBuilder addDevice(Device device, String targetState) {
-        // Implementation will be added later
+        this.deviceStates.put(device, targetState);
         return this;
     }
     
     public Scene build() {
-        // Implementation will be added later
-        return null;
+        if (name == null || name.isEmpty()) {
+            throw new IllegalStateException("Scene name must be set before building.");
+        }
+        return new Scene(name, deviceStates);
     }
 }
 

@@ -9,8 +9,8 @@ import com.smarthome.devices.Light;
 public class LightFactory implements DeviceFactory {
     @Override
     public Device createDevice(String id, String name) {
-        // Implementation will be added later
-        return null;
+        // This follows the Factory Method pattern by encapsulating instantiation
+        return new Light(id, name);
     }
 }
 

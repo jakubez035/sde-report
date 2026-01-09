@@ -9,12 +9,23 @@ public class TurnLightOffCommand implements Command {
     private Light light;
     private boolean previousState;
     
-    // Implementation will be added later
+    public TurnLightOffCommand(Light light) {
+        this.light = light;
+    }
     
     @Override
-    public void execute() {}
+    public void execute() {
+        previousState = light.isOn();
+        light.turnOff();
+    }
     
     @Override
-    public void undo() {}
+    public void undo() {
+        if (previousState) {
+            light.turnOn();
+        } else {
+            light.turnOff();
+        }
+    }
 }
 

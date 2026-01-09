@@ -8,21 +8,35 @@ import com.smarthome.devices.Device;
 public class DeviceAdapter implements Device {
     private ThirdPartyDevice thirdPartyDevice;
     
-    // Implementation will be added later
+    public DeviceAdapter(ThirdPartyDevice thirdPartyDevice) {
+        this.thirdPartyDevice = thirdPartyDevice;
+    }
     
     @Override
-    public String getId() { return null; }
+    public String getId() { 
+        return thirdPartyDevice.getDeviceId();
+    }
     
     @Override
-    public String getName() { return null; }
+    public String getName() { 
+        return "Adapted-" + thirdPartyDevice.getDeviceId();
+    }
     
     @Override
-    public void turnOn() {}
+    public void turnOn() {
+        // Mapping 'turnOn' to the third-party 'activate' method
+        thirdPartyDevice.activate();
+    }
     
     @Override
-    public void turnOff() {}
+    public void turnOff() {
+        // Mapping 'turnOff' to the third-party 'deactivate' method
+        thirdPartyDevice.deactivate();
+    }
     
     @Override
-    public boolean isOn() { return false; }
+    public boolean isOn() { 
+        return thirdPartyDevice.getStatus().equals("ACTIVE");
+     }
 }
 
