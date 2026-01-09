@@ -166,3 +166,70 @@ The Smart Home Simulator class diagram illustrates a Java application that demon
 - **SmartHomeSimulator Class**: Main application class that demonstrates all design patterns working together in an integrated scenario. Contains the `main(String[])` method as the entry point for the application.
 
 **Relationships**: Uses classes from all other packages to demonstrate the complete system functionality. The `SmartHomeSimulator` class has dependency relationships with `DeviceFactory`, `Device`, `Sensor`, `Command`, `Scene`, and `DeviceAdapter` classes.
+
+---
+
+# Pull Request Summary - Jakub Holík
+
+## Overview
+This document provides a brief summary of three pull requests that implement core functionality for the Smart Home Simulator, demonstrating multiple design patterns (Factory Method, Command, and Observer).
+
+---
+
+## PR 1: Thermostat Functionality Implementation
+
+**Purpose**: Complete thermostat device implementation with temperature control
+
+**Key Components**:
+- **Thermostat.java**: Core device with temperature control (10-30°C range validation)
+- **ThermostatFactory.java**: Factory Method pattern for creating thermostat instances
+- **SetTempCommand.java**: Command pattern with undo support for temperature changes
+- **TemperatureSensor.java**: Observer pattern implementation that monitors temperature and notifies observers
+- **SensorEvent.java**: Helper class for sensor event notifications
+- **ThermostatTest.java**: Tests
+
+**Design Patterns Demonstrated**:
+- Factory Method: Device creation through factory
+- Command: Encapsulated temperature operations with undo
+- Observer: Temperature sensor notifies observers of significant changes (>2°C)
+
+**Features**: Temperature validation, command undo, sensor-driven automation, error handling
+
+---
+
+## PR 2: DoorLock Functionality Implementation
+
+**Purpose**: Complete door lock device implementation with lock/unlock control
+
+**Key Components**:
+- **DoorLock.java**: Core device with lock/unlock functionality and state management
+- **DoorLockFactory.java**: Factory Method pattern for creating door lock instances
+- **LockDoorCommand.java**: Command pattern with undo for lock operations
+- **UnlockDoorCommand.java**: Command pattern with undo for unlock operations
+- **DoorLockTest.java**: Tests
+
+**Design Patterns Demonstrated**:
+- Factory Method: Device creation through factory
+- Command: Encapsulated lock/unlock operations with undo
+
+**Features**: Lock/unlock control, state validation (prevents operations when device is off), command undo, factory flexibility
+
+---
+
+## PR 3: Fix Observer Pattern Implementation
+
+**Purpose**: Fix linter errors and complete Observer pattern implementation
+
+**Key Changes**:
+- **AbstractDeviceFactory.java**: Removed unused import to fix linter warning
+- **MotionSensor.java**: Completed implementation with motion detection logic (30% random chance), proper observer notification, and event publishing (MOTION_DETECTED, MOTION_STOPPED)
+- **SmartHomeController.java**: Completed implementation with reactive automation:
+  - MOTION_DETECTED → automatically turns on all registered lights
+  - TEMPERATURE_CHANGED → adjusts thermostat (temp < 18°C → 20°C, temp > 23°C → 22°C)
+  - Device registration/unregistration management
+
+**Design Patterns Demonstrated**:
+- Observer: Complete sensor-observer relationship with reactive device control
+
+**Features**: Motion detection simulation, automatic device control based on sensor events, intelligent temperature management
+
