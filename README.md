@@ -43,8 +43,8 @@ mvn compile
 
 Project structure created. Implementation in progress.
 
-
 # Smart Home Simulator - Class Diagram Description
+<img width="3941" height="902" alt="SDE Report Home Simulator Class Diagram" src="https://github.com/user-attachments/assets/7faadd87-3a33-40c0-a321-7771c92e0312" />
 
 ## Overview
 
