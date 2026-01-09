@@ -8,6 +8,31 @@ public class SensorEvent {
     private String eventType;
     private Object eventData;
     
-    // Constructor and methods will be implemented later
+    public SensorEvent(Sensor sensor, String eventType, Object eventData) {
+        this.sensor = sensor;
+        this.eventType = eventType;
+        this.eventData = eventData;
+    }
+    
+    public Sensor getSensor() {
+        return sensor;
+    }
+    
+    public String getEventType() {
+        return eventType;
+    }
+    
+    public Object getEventData() {
+        return eventData;
+    }
+    
+    @Override
+    public String toString() {
+        return "SensorEvent{" +
+                "sensor=" + sensor.getId() +
+                ", eventType='" + eventType + '\'' +
+                ", eventData=" + eventData +
+                '}';
+    }
 }
 
