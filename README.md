@@ -80,19 +80,19 @@ mvn exec:java -Dexec.mainClass='com.smarthome.main.SmartHomeSimulator'
 ```
 
 To run tests run:
-# Unit Tests
+### Unit Tests
 mvn exec:java -Dexec.mainClass='com.smarthome.test.LightTest'
 
-# Integration Tests
+### Integration Tests
 mvn exec:java -Dexec.mainClass='com.smarthome.test.PatternIntegrationTestAlex'
 
-# Performance Tests
+### Performance Tests
 mvn exec:java -Dexec.mainClass='com.smarthome.test.SystemScaleTest'
 
-# Door Lock Test
+### Door Lock Test
 mvn exec:java -Dexec.mainClass='com.smarthome.test.DoorLockTest'
 
-# Thermostat Test
+### Thermostat Test
 mvn exec:java -Dexec.mainClass='com.smarthome.test.ThermostatTest'
 
 
