@@ -101,6 +101,7 @@ mvn exec:java -Dexec.mainClass='com.smarthome.test.ThermostatTest'
 <img width="3941" height="902" alt="SDE Report Home Simulator Class Diagram" src="https://github.com/user-attachments/assets/7faadd87-3a33-40c0-a321-7771c92e0312" />
 
 # Smart Home Simulator - Flowchart
+<img width="8192" height="3929" alt="SDE Report Home Simulator Flowchart" src="https://github.com/user-attachments/assets/b324e0af-1846-4f35-9aee-accc589c0b27" />
 
 
 ## Overview
