@@ -2,6 +2,8 @@
 
 A Java CLI application demonstrating design patterns for managing smart home devices, scenes, and sensor events.
 
+Repo: https://github.com/jakubez035/sde-report
+
 ## Project Structure
 
 ```
