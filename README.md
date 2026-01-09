@@ -1,4 +1,4 @@
-# Smart Home Simulator (CLI)
+# Smart Home Simulator
 
 A Java CLI application demonstrating design patterns for managing smart home devices, scenes, and sensor events.
 
@@ -33,22 +33,25 @@ src/main/java/com/smarthome/
 
 ## Building
 
-This project uses Maven. To build:
+This project uses Maven. 
+To build run:
 
 ```bash
 mvn compile
 ```
 
-## Status
+To run demo run:
 
-Project structure created. Implementation in progress.
+```bash
+mvn exec:java -Dexec.mainClass='com.smarthome.main.SmartHomeSimulator'
+```
 
-# Smart Home Simulator - Class Diagram Description
+# Smart Home Simulator - Class Diagram
 <img width="3941" height="902" alt="SDE Report Home Simulator Class Diagram" src="https://github.com/user-attachments/assets/7faadd87-3a33-40c0-a321-7771c92e0312" />
 
 ## Overview
 
-The Smart Home Simulator class diagram illustrates a comprehensive Java application that demonstrates multiple design patterns for managing smart home devices, sensors, and automation. The system is organized into seven main packages, each representing different design pattern implementations and functional areas.
+The Smart Home Simulator class diagram illustrates a Java application that demonstrates multiple design patterns for managing smart home devices, sensors, and automation. The system is organized into seven main packages, each representing different design pattern implementations and functional areas.
 
 ## Package Structure
 
@@ -163,46 +166,3 @@ The Smart Home Simulator class diagram illustrates a comprehensive Java applicat
 - **SmartHomeSimulator Class**: Main application class that demonstrates all design patterns working together in an integrated scenario. Contains the `main(String[])` method as the entry point for the application.
 
 **Relationships**: Uses classes from all other packages to demonstrate the complete system functionality. The `SmartHomeSimulator` class has dependency relationships with `DeviceFactory`, `Device`, `Sensor`, `Command`, `Scene`, and `DeviceAdapter` classes.
-
-## Design Pattern Summary
-
-The system demonstrates five key design patterns:
-
-1. **Factory Method & Abstract Factory** (Creational): Device creation through factories
-2. **Observer** (Behavioral): Sensor-driven automation with event notifications
-3. **Command** (Behavioral): Encapsulated device operations with undo support
-4. **Builder** (Creational): Step-by-step scene construction
-5. **Adapter** (Structural): Integration of third-party devices
-
-## Diagram Layout and Visual Design
-
-The class diagram is organized in a **vertical (top-to-bottom) layout**, making it optimized for portrait orientation and A4 paper format. Each package is visually distinguished with a unique background color:
-
-- **Devices Package**: Light Blue
-- **Factory Package**: Light Orange
-- **Observer Package**: Light Green
-- **Command Package**: Light Purple
-- **Builder Package**: Light Yellow
-- **Adapter Package**: Light Pink
-- **Main Package**: Light Gray
-
-Interfaces are displayed with a light blue background and blue borders, while classes use white backgrounds with dark gray borders. This color-coding scheme enhances readability and makes it easier to distinguish between different package responsibilities and class types.
-
-## Key Relationships
-
-- **Inheritance**: Device implementations (`Light`, `Thermostat`, `DoorLock`) extend the `Device` interface; sensors (`MotionSensor`, `TemperatureSensor`) extend both `Sensor` and `SensorSubject` interfaces; commands extend the `Command` interface; factories extend the `DeviceFactory` interface
-- **Composition**: `SmartHomeController` contains a list of `Device` instances; `Scene` contains a map of `Device` to state; commands contain references to specific devices; `DeviceAdapter` wraps `ThirdPartyDevice`
-- **Dependency**: Factories create devices; `CommandInvoker` executes commands; `SceneBuilder` creates scenes; `DeviceAdapter` wraps third-party devices; `SmartHomeSimulator` uses classes from all packages
-- **Association**: Sensors notify observers through events; controllers control devices based on sensor events; `SensorEvent` contains sensor information and notifies observers
-
-## System Flow
-
-1. **Device Creation**: Factories create device instances
-2. **Device Registration**: Devices are registered with `SmartHomeController`
-3. **Sensor Observation**: Sensors are attached to observers (controller)
-4. **Event-Driven Automation**: Sensor events trigger automatic device control
-5. **Manual Control**: Commands can be executed manually with undo support
-6. **Scene Execution**: Pre-configured scenes can be executed to set multiple device states
-7. **Third-Party Integration**: Adapters allow legacy devices to work with the system
-
-This architecture provides flexibility, extensibility, and maintainability through the use of well-established design patterns, making it easy to add new device types, sensors, commands, and scenes without modifying existing code.
